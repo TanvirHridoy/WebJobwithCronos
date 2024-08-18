@@ -1,10 +1,8 @@
-using Serilog.Events;
 using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 using ServiceWorkerCronJobDemo.Services;
 using System.Globalization;
-using Serilog.Core;
-using Microsoft.EntityFrameworkCore;
-using ServiceWorkerCronJobDemo.DTO;
 
 namespace ServiceWorkerCronJobDemo
 {
@@ -39,16 +37,15 @@ namespace ServiceWorkerCronJobDemo
             Log.Logger = logConfiguration.CreateLogger();
             services.AddLogging(x => x.AddSerilog());
 
-            
 
             services.AddScoped<IMyScopedService, MyScopedService>();
 
-            services.AddCronJob<MyCronJob1>(c =>
+            services.AddCronJob<MyJobWithSerilog>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                 c.CronExpression = "*/1 * * * *";
             });
-            // MyCronJob2 calls the scoped service MyScopedService
+            //MyCronJob2 calls the scoped service MyScopedService
             //services.AddCronJob<MyCronJob2>(c =>
             //{
             //    c.TimeZoneInfo = TimeZoneInfo.Local;
