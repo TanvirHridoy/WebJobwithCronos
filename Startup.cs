@@ -20,7 +20,7 @@ namespace ServiceWorkerCronJobDemo
         {
             services.AddControllers();
             //sql server
-            services.AddDbContext<EmployeeDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("EmployeeDb")));
+            //services.AddDbContext<EmployeeDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("EmployeeDb")));
 
             var levelSwitch = new LoggingLevelSwitch();
             levelSwitch.MinimumLevel = LogEventLevel.Verbose;

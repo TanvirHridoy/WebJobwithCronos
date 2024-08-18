@@ -26,41 +26,42 @@ namespace ServiceWorkerCronJobDemo.Services
         {
             _logger.LogInformation("{now} CronJob 1 is working.", DateTime.Now.ToString("T"));
 
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var _db = scope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
+            //using (var scope = _serviceScopeFactory.CreateScope())
+            //{
+                //var _db = scope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
 
                 try
                 {
-                    await _db.WebJobLogs.AddAsync(new WebJobLog { Id = 0, Log = $"{DateTime.Now:T} CronJob 1 is working.", TimeStamp = DateTime.Now });
-                    await _db.SaveChangesAsync();
+                _logger.LogInformation($"{DateTime.Now:T} CronJob 1 is working.");
+                //await _db.WebJobLogs.AddAsync(new WebJobLog { Id = 0, Log = $"{DateTime.Now:T} CronJob 1 is working.", TimeStamp = DateTime.Now });
+                //await _db.SaveChangesAsync();
 
-                    for (int i = 1; i <= 120; i++)
+                for (int i = 1; i <= 120; i++)
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
                             _logger.LogInformation("CronJob 1 is being cancelled.");
-                            await _db.WebJobLogs.AddAsync(new WebJobLog { Id = 0, Log = "CronJob 1 is being cancelled.", TimeStamp = DateTime.Now });
-                            await _db.SaveChangesAsync();
+                            //await _db.WebJobLogs.AddAsync(new WebJobLog { Id = 0, Log = "CronJob 1 is being cancelled.", TimeStamp = DateTime.Now });
+                            //await _db.SaveChangesAsync();
                             break;
                         }
 
                         _logger.LogInformation("Elapsed Time: {seconds} seconds.", i);
-                        await _db.WebJobLogs.AddAsync(new WebJobLog { Id = 0, Log = $"Elapsed Time: {i} seconds.", TimeStamp = DateTime.Now });
-                        await _db.SaveChangesAsync();
+                        //await _db.WebJobLogs.AddAsync(new WebJobLog { Id = 0, Log = $"Elapsed Time: {i} seconds.", TimeStamp = DateTime.Now });
+                        //await _db.SaveChangesAsync();
                         await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                     }
 
                     _logger.LogInformation("{now} CronJob 1 finished work.", DateTime.Now.ToString("T"));
-                    await _db.WebJobLogs.AddAsync(new WebJobLog { Id = 0, Log = $"{DateTime.Now:T} CronJob 1 finished work.", TimeStamp = DateTime.Now });
-                    await _db.SaveChangesAsync();
+                    //await _db.WebJobLogs.AddAsync(new WebJobLog { Id = 0, Log = $"{DateTime.Now:T} CronJob 1 finished work.", TimeStamp = DateTime.Now });
+                    //await _db.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "An error occurred while executing CronJob 1.");
                     throw; // Optionally rethrow if you need to propagate the error
                 }
-            }
+            //}
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
