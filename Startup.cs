@@ -19,6 +19,8 @@ namespace ServiceWorkerCronJobDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            //sql server
+            services.AddDbContext<EmployeeDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("EmployeeDb")));
 
             var levelSwitch = new LoggingLevelSwitch();
             levelSwitch.MinimumLevel = LogEventLevel.Verbose;
@@ -28,12 +30,16 @@ namespace ServiceWorkerCronJobDemo
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("OriginSystem", typeof(Program).Namespace)
                 .MinimumLevel.ControlledBy(levelSwitch)
-                .WriteTo.File(filePath, LogEventLevel.Verbose, "", CultureInfo.InvariantCulture);
+                .WriteTo.File(filePath, LogEventLevel.Verbose,
+                    rollingInterval: RollingInterval.Day, // Optional: create a new file daily
+                    fileSizeLimitBytes: 10_000_000, // Optional: limit file size (10 MB)
+                    retainedFileCountLimit: 10, // Optional: keep 10 files
+                    formatProvider: CultureInfo.InvariantCulture
+                );
             Log.Logger = logConfiguration.CreateLogger();
             services.AddLogging(x => x.AddSerilog());
 
-            //sql server
-            services.AddDbContext<EmployeeDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("EmployeeDb")));
+            
 
             services.AddScoped<IMyScopedService, MyScopedService>();
 
